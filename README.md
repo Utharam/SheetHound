@@ -3,8 +3,9 @@
 > **The Spreadsheet Watchdog** — Sniffing Out Ghost Links, Leaks & Stray Cells  
 > *Created with care by [Utharam](https://utharam.github.io/)* • *Dedicated to **Veeran, the Indian Spitz** 🐾*
 
-[![Live App](https://img.shields.io/badge/Live%20Demo-sheethound.utharam.workers.dev-amber?style=for-the-badge&logo=cloudflare)](https://sheethound.utharam.workers.dev/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-sheethound.utharam.workers.dev-amber?style=for-the-badge&logo=cloudflare)](https://sheethound.utharam.workers.dev/)
 [![Privacy Guaranteed](https://img.shields.io/badge/Privacy-100%25%20In--Browser%20Memory-emerald.svg)](#-100-in-browser-privacy--safety)
+[![Tests Passing](https://img.shields.io/badge/Audit%20Tests-9%2F9%20Passing-emerald.svg)](#-automated-verification-suite)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19-61dafb.svg)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.x-purple.svg)](https://vitejs.dev/)
@@ -14,51 +15,60 @@
 
 ## ⚡ What is SheetHound?
 
-**SheetHound** is a fast, pre-flight inspection tool built for accountants, finance managers, and spreadsheet inhabitants. 
+**SheetHound** is an ultra-fast, pre-flight inspection tool built for accountants, financial analysts, and corporate modelers.
 
-Before emailing a sensitive model to your CFO, clients, or audit committee, drop it into SheetHound to catch embarrassing formula errors, broken external references, hidden tabs, and stray scratchpad cells in milliseconds.
+Before emailing a critical financial model to your CFO, investment committee, or client, drop it into SheetHound. In milliseconds, it sniffs out embarrassing formula errors, broken external references, hidden tabs, rogue formatting, and stray scratchpad cells.
 
 ### 🛡️ Core Philosophy: The Pure Watcher
-- **Read-Only Inspection:** SheetHound never modifies, rewrites, or saves over your files. Zero risk of workbook corruption.
-- **100% Client-Side Privacy:** Your spreadsheet never leaves your computer. Parsing and auditing run entirely in your local browser memory (`exceljs` + `jszip`). Turn off Wi-Fi and it still audits flawlessly.
+- **Read-Only Inspection:** SheetHound never modifies, rewrites, or touches your original file. Zero risk of workbook corruption.
+- **100% Client-Side Privacy:** Your spreadsheet never leaves your machine. Parsing and auditing execute completely inside your browser's local RAM (`exceljs` + `jszip`). Disconnect your internet and it still works flawlessly.
 
 ---
 
 ## ✨ Features
 
+### 🗺️ Interactive Spatial Data Density Heatmap & Minimap *(New)*
+Gain instant visual awareness of your worksheet geography with an adaptive 24×12 grid radar:
+- **Visual Accumulation vs. Dispersion:** See where data is concentrated in dense tables versus scattered across the canvas.
+- **Primary Cluster Detection:** Automatically identifies and bounds the main data block (e.g. *96% of data concentrated in `A1:E7`*).
+- **Stray Cell Outlier Tagging:** Instantly pins isolated scratchpad calculations stranded far outside the primary table range (e.g., at `W180`).
+- **Zero-Flicker Live Inspector:** Hover over any tile to preview its cell coordinates and sample data values with guaranteed stable layout height.
+- **Tab Cycling Controls:** Seamlessly loop through all worksheets using `[← Prev Tab]` / `[Next Tab →]` buttons or direct tab indicator pills.
+- **Clean Toggle Mode:** Tucked behind an on-demand toggle in both the Executive Summary and Tab Breakdown to keep your audit review focused and clutter-free.
+
 ### 🔗 Ghost Link & `#REF!` Sniffer (The FM Shield)
-Detects formulas referencing external workbooks (e.g. `='[2024_Budget.xlsx]Sheet1'!$B$12`) that will break and explode into `#REF!` as soon as the file is opened by someone outside your network.
+Detects formulas referencing external workbooks (e.g. `='[2024_Budget.xlsx]Sheet1'!$B$12`) that will instantly break and trigger `#REF!` errors as soon as the file is opened outside your local company drive.
 
 ### 🏝️ Isolated Stray Cell Radar
-Financial models often have stray scratchpad calculations forgotten 100+ rows or columns away. SheetHound uses a **10-cell neighborhood density algorithm** ($\pm 5$ rows, $\pm 5$ cols) to pinpoint isolated outlier cells with content previews while ignoring legitimate table expansions.
+Pinpoint stray scratchpad math forgotten 100+ rows or columns away. SheetHound's **10-cell neighborhood density algorithm** ($\pm 5$ rows, $\pm 5$ columns) isolates rogue outlier calculations with content previews while ignoring legitimate table expansions.
 
 ### 🕵️ Hidden & `xlSheetVeryHidden` Unmasker
-Finds standard hidden worksheets as well as VBA-level `xlSheetVeryHidden` tabs (which cannot be unhidden from the normal Excel right-click menu and often contain sensitive payroll, cap table, or margin formulas).
+Reveals standard hidden worksheets as well as VBA-level `xlSheetVeryHidden` tabs (which cannot be viewed from the normal Excel right-click menu and often house sensitive payroll, margin, or cap table numbers).
 
 ### 💥 Complete Formula Error Registry
-Instantly indexes every `#REF!`, `#DIV/0!`, `#VALUE!`, `#N/A`, `#NAME?`, and `#NUM!` error with exact cell coordinates, sheet names, formula logic, and cached values.
+Instantly indexes every `#REF!`, `#DIV/0!`, `#VALUE!`, `#N/A`, `#NAME?`, and `#NUM!` error with exact cell coordinates, sheet names, formula definitions, and cached values.
 
 ### 🎨 Typography & Design Palette Audit
-Catalogs all font families and cell colors used across the workbook, helping you maintain brand consistency and spot rogue formatting before client delivery.
+Catalogs all font families and cell fill colors across the workbook, helping you maintain brand consistency and spot rogue formatting before board presentations.
 
 ### 📜 Executive Audit Certificate & Multi-Format Export
-- **Print / Save as PDF:** Formatted executive audit certificate with zero website chrome, clean A4/letter page breaks, and exact print color reproduction.
-- **Standalone HTML Report (`.html`):** Offline-ready, styled certificate viewable in any browser.
-- **Markdown (`.md`):** Formatted tables ready to copy-paste into Slack, Notion, or GitHub.
-- **JSON Data (`.json`):** Complete programmatic audit schema for automated pipelines.
+- **Print / Save as PDF:** Generates a pristine, standalone executive audit certificate. Features custom print stylesheets, clean A4/letter page breaks, exact color rendition, and zero website UI chrome.
+- **Markdown Report (`.md`):** Formatted tables ready to copy-paste directly into Slack, Notion, PRs, or GitHub discussions.
+- **Standalone HTML Report (`.html`):** Offline-ready, self-contained audit summary viewable in any web browser.
+- **JSON Data Schema (`.json`):** Full structured programmatic audit payload for automated CI/CD validation pipelines.
 
 ---
 
 ## 🔒 100% In-Browser Privacy & Safety
 
-Your spreadsheets contain sensitive financial numbers, payroll, and proprietary business logic. SheetHound was built with strict privacy-first principles:
+Spreadsheets frequently contain sensitive financial figures, payroll details, and trade secrets. SheetHound is engineered with strict client-only principles:
 
-1. **We Can't See Your Data:** We do not have servers, databases, or analytics tracking your spreadsheets.
-2. **Local Memory Only:** Your file is loaded directly into your browser's local RAM and discarded when you close or refresh the tab.
-3. **Works 100% Offline:** Disconnect from the internet or go into Airplane Mode — SheetHound will function identically.
+1. **We Never See Your Data:** There are zero backend servers, databases, or tracking telemetry receiving your files.
+2. **Volatile Browser RAM:** Your file is loaded strictly into your browser's temporary memory and immediately discarded upon page refresh or tab close.
+3. **Works 100% Offline:** Disconnect from Wi-Fi or turn on Airplane Mode — SheetHound runs completely uninterrupted.
 
-### 🤖 Ask Your LLM (Copy & Paste Verification)
-If you or your compliance team want to verify this, paste this prompt into ChatGPT, Claude, or Gemini:
+### 🤖 Verify with AI (Prompt for ChatGPT / Claude / Gemini)
+If your compliance or security team wants independent verification, copy and paste this into any LLM:
 
 ```text
 Explain how client-side web apps like SheetHound (built with ExcelJS and JSZip in React) process files locally in browser memory without sending data to any external server or backend. Is my spreadsheet private if the app runs entirely in the browser DOM?
@@ -68,29 +78,46 @@ Explain how client-side web apps like SheetHound (built with ExcelJS and JSZip i
 
 ## 🐕 Dedication: Veeran the Indian Spitz
 
-SheetHound is dedicated with pride and affection to **Veeran**, a brave, loyal Indian Spitz. Just like Veeran guarded the home with sharp ears and a vigilant bark, SheetHound stands watch over your workbooks to ensure nothing suspicious slips past.
+SheetHound was built in affectionate tribute to **Veeran**, a brave, loyal Indian Spitz. Just as Veeran watched over the home with razor-sharp ears and unwavering loyalty, SheetHound stands guard over your workbooks to ensure no rogue error slips past unnoticed.
 
-Click the 🐕 dog mascot in the top navbar or footer to open the Veeran Easter egg!
+> **Quirky Easter Egg:** Click the subtle `🐾` paw emoji next to Utharam in the footer to reveal the Veeran tribute!
+
+---
+
+## 🧪 Automated Verification Suite
+
+SheetHound includes an automated end-to-end verification suite testing all core auditing mechanics against simulated enterprise workbooks:
+
+```bash
+npx tsx src/test/verifyAudit.ts
+```
+
+**Passing 9/9 Automated Checks:**
+- ✅ `xlSheetVeryHidden` sheet detected correctly
+- ✅ Hidden sheet detected correctly
+- ✅ External link references detected
+- ✅ Formula errors (`#REF!`, `#DIV/0!`) cataloged
+- ✅ Farthest cell identified
+- ✅ Cross-sheet formula references mapped
+- ✅ Spatial heatmaps computed for all worksheets
+- ✅ Stray outliers pinned with coordinate radar
+- ✅ Primary cluster bounding and density percentages verified
 
 ---
 
 ## 🚀 Getting Started
 
-### Prerequisites
-- Node.js (v18 or higher recommended)
-- npm or pnpm
-
-### Installation
+### Local Development
 
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/Utharam/SheetHound.git
 cd SheetHound
 
 # Install dependencies
 npm install
 
-# Start local development server
+# Start local Vite dev server
 npm run dev
 ```
 
@@ -102,16 +129,24 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 npm run build
 ```
 
-The output bundle will be generated in `dist/`, ready to deploy to GitHub Pages, Cloudflare Pages, Vercel, or any static web host.
+Generates a production-ready static bundle in `dist/` with automated Single Page Application fallback routing and asset caching headers.
+
+### Cloudflare Deployment
+
+SheetHound is deployed to Cloudflare Workers Static Assets with automated GitHub CI/CD:
+- Configuration handled via [`wrangler.jsonc`](./wrangler.jsonc).
+- Automated builds triggered on push to `main`.
+- Live production endpoint: **[https://sheethound.utharam.workers.dev/](https://sheethound.utharam.workers.dev/)**
 
 ---
 
 ## 🛠️ Built With
 
 - **Framework:** [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- **Bundler:** [Vite](https://vitejs.dev/)
+- **Bundler & Build Tool:** [Vite](https://vitejs.dev/)
 - **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
 - **Spreadsheet Parsing:** [ExcelJS](https://github.com/exceljs/exceljs) & [JSZip](https://stuk.github.io/jszip/)
+- **Deployment:** [Cloudflare Workers Static Assets](https://developers.cloudflare.com/workers/)
 - **Icons:** [Lucide React](https://lucide.dev/)
 
 ---

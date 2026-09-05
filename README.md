@@ -3,6 +3,7 @@
 > **The Spreadsheet Watchdog** — Sniffing Out Ghost Links, Leaks & Stray Cells  
 > *Created with care by [Utharam](https://utharam.github.io/)* • *Dedicated to **Veeran, the Indian Spitz** 🐾*
 
+[![Live App](https://img.shields.io/badge/Live%20Demo-sheethound.utharam.workers.dev-amber?style=for-the-badge&logo=cloudflare)](https://sheethound.utharam.workers.dev/)
 [![Privacy Guaranteed](https://img.shields.io/badge/Privacy-100%25%20In--Browser%20Memory-emerald.svg)](#-100-in-browser-privacy--safety)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19-61dafb.svg)](https://react.dev/)

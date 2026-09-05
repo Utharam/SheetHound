@@ -4,17 +4,37 @@ import {
   AlertTriangle,
   AlertOctagon,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import type { SheetAudit, HeatmapBlock } from '../types/audit';
 
 interface SheetHeatmapBoxProps {
   sheet: SheetAudit;
+  allSheets?: SheetAudit[];
+  currentSheetIndex?: number;
+  onSelectSheet?: (index: number) => void;
 }
 
 export const SheetHeatmapBox: React.FC<SheetHeatmapBoxProps> = ({
   sheet,
+  allSheets,
+  currentSheetIndex = 0,
+  onSelectSheet,
 }) => {
   const heatmap = sheet.heatmap;
+
+  const handlePrevTab = () => {
+    if (!allSheets || !onSelectSheet) return;
+    const nextIdx = (currentSheetIndex - 1 + allSheets.length) % allSheets.length;
+    onSelectSheet(nextIdx);
+  };
+
+  const handleNextTab = () => {
+    if (!allSheets || !onSelectSheet) return;
+    const nextIdx = (currentSheetIndex + 1) % allSheets.length;
+    onSelectSheet(nextIdx);
+  };
 
   // Find default highlighted block (stray block if exists, else top-left block)
   const defaultBlock = React.useMemo(() => {
@@ -46,19 +66,69 @@ export const SheetHeatmapBox: React.FC<SheetHeatmapBoxProps> = ({
   const activeBlock = hoveredBlock || defaultBlock;
 
   return (
-    <div className="bg-slate-950 text-slate-100 rounded-xl p-4 border border-slate-800 shadow-md space-y-3 font-sans">
+    <div className="bg-slate-950 text-slate-100 rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-xl space-y-3.5 font-sans">
+      
+      {/* Optional Tab Circling Control Bar */}
+      {allSheets && allSheets.length > 1 && onSelectSheet && (
+        <div className="flex items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 p-2 rounded-xl">
+          <button
+            onClick={handlePrevTab}
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition cursor-pointer shrink-0"
+            title="Circle to previous tab"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Prev Tab</span>
+          </button>
+
+          {/* Tab Selector Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto py-0.5 px-1 max-w-xl">
+            {allSheets.map((s, idx) => {
+              const isCurrent = idx === currentSheetIndex;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => onSelectSheet(idx)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 shrink-0 whitespace-nowrap ${
+                    isCurrent
+                      ? 'bg-emerald-600 text-white shadow-2xs'
+                      : 'bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <span className="font-mono text-[11px]">{s.name}</span>
+                  {s.boundary.hasStrayCells && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" title="Contains stray cells" />
+                  )}
+                  {s.errorCount > 0 && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-400" title="Contains errors" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={handleNextTab}
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition cursor-pointer shrink-0"
+            title="Circle to next tab"
+          >
+            <span className="hidden sm:inline">Next Tab</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-2.5">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-            <Grid className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold shrink-0">
+            <Grid className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-xs font-bold text-slate-100 flex items-center gap-2">
-              Spatial Data Density &amp; Stray Radar
+            <div className="text-xs font-bold text-slate-100 flex items-center gap-2 flex-wrap">
+              <span>{sheet.name} — Spatial Data Radar</span>
               {sheet.boundary.hasStrayCells ? (
                 <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                  <AlertTriangle className="w-2.5 h-2.5" /> Stray Cell at {sheet.boundary.farthestCell}
+                  <AlertTriangle className="w-2.5 h-2.5" /> Stray Outlier at {sheet.boundary.farthestCell}
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
@@ -66,15 +136,15 @@ export const SheetHeatmapBox: React.FC<SheetHeatmapBoxProps> = ({
                 </span>
               )}
             </div>
-            <p className="text-[10px] text-slate-400">
+            <p className="text-[10px] text-slate-400 mt-0.5">
               Mapped bounds: Rows 1..{sheet.boundary.maxRow} • Cols A..{sheet.boundary.maxCol ? String.fromCharCode(64 + Math.min(26, sheet.boundary.maxCol)) : 'A'} ({heatmap.totalCells} cells total)
             </p>
           </div>
         </div>
 
         {/* Top-Right Quick Stat */}
-        <div className="text-[11px] text-slate-400 flex items-center gap-2">
-          <span className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-300 font-mono text-[10px]">
+        <div className="text-[11px] text-slate-400 flex items-center gap-2 self-start sm:self-auto">
+          <span className="bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-md text-slate-300 font-mono text-[10px]">
             Peak Block: {heatmap.maxBlockCount} cells
           </span>
         </div>
@@ -153,58 +223,80 @@ export const SheetHeatmapBox: React.FC<SheetHeatmapBoxProps> = ({
         </div>
       </div>
 
-      {/* Live Block Inspector Readout */}
-      {activeBlock && (
-        <div className="bg-slate-900 border border-slate-800 p-2.5 rounded-lg text-xs space-y-1 animate-in fade-in duration-150">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <div className="flex items-center gap-2">
-              <span className="font-mono font-bold text-emerald-400 text-[11px]">
-                Rows {activeBlock.rowStart}–{activeBlock.rowEnd}, Cols {activeBlock.colStartLetter}–{activeBlock.colEndLetter}
-              </span>
-              <span className="text-slate-400 text-[11px]">•</span>
-              <span className="text-slate-200 text-[11px] font-semibold">
-                {activeBlock.cellCount === 0
-                  ? 'Empty Block (0 cells)'
-                  : `${activeBlock.cellCount} cell${activeBlock.cellCount > 1 ? 's' : ''} (${Math.round(activeBlock.density * 100)}% density)`}
-              </span>
+      {/* Live Block Inspector Readout (Fixed Height - Zero Layout Shift / Flicker) */}
+      <div className="bg-slate-900/90 border border-slate-800 px-3 py-2 rounded-xl text-xs h-[58px] flex flex-col justify-between overflow-hidden select-none">
+        {activeBlock ? (
+          <>
+            {/* Line 1: Coordinates & Population Status */}
+            <div className="flex items-center justify-between gap-2 h-5">
+              <div className="flex items-center gap-2 truncate">
+                <span className="font-mono font-bold text-emerald-400 text-[11px] shrink-0">
+                  Rows {activeBlock.rowStart}–{activeBlock.rowEnd}, Cols {activeBlock.colStartLetter}–{activeBlock.colEndLetter}
+                </span>
+                <span className="text-slate-500 text-[11px] shrink-0">•</span>
+                <span className="text-slate-200 text-[11px] font-semibold truncate">
+                  {activeBlock.cellCount === 0
+                    ? 'Empty Block (0 cells)'
+                    : `${activeBlock.cellCount} cell${activeBlock.cellCount > 1 ? 's' : ''} (${Math.round(activeBlock.density * 100)}% density)`}
+                </span>
+              </div>
+
+              {/* Block Status Badges */}
+              <div className="flex items-center gap-1.5 shrink-0">
+                {activeBlock.hasStray ? (
+                  <span className="px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 font-semibold text-[10px] flex items-center gap-1">
+                    <AlertTriangle className="w-2.5 h-2.5" /> Isolated Stray ({activeBlock.strayCellAddress})
+                  </span>
+                ) : activeBlock.hasErrors ? (
+                  <span className="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-300 font-semibold text-[10px] flex items-center gap-1">
+                    <AlertOctagon className="w-2.5 h-2.5" /> {activeBlock.errorCount} Error{activeBlock.errorCount > 1 ? 's' : ''}
+                  </span>
+                ) : activeBlock.density > 0.5 ? (
+                  <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-semibold">
+                    Main Table Cluster
+                  </span>
+                ) : activeBlock.cellCount > 0 ? (
+                  <span className="px-1.5 py-0.5 rounded bg-emerald-900/40 text-emerald-400 text-[10px]">
+                    Populated
+                  </span>
+                ) : (
+                  <span className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 text-[10px]">
+                    Empty Space
+                  </span>
+                )}
+              </div>
             </div>
 
-            {/* Block Badges */}
-            <div className="flex items-center gap-1.5">
-              {activeBlock.hasStray && (
-                <span className="px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 font-semibold text-[10px] flex items-center gap-1">
-                  <AlertTriangle className="w-2.5 h-2.5" /> Isolated Stray ({activeBlock.strayCellAddress})
-                </span>
-              )}
-              {activeBlock.hasErrors && (
-                <span className="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-300 font-semibold text-[10px] flex items-center gap-1">
-                  <AlertOctagon className="w-2.5 h-2.5" /> {activeBlock.errorCount} Error{activeBlock.errorCount > 1 ? 's' : ''}
-                </span>
-              )}
-              {!activeBlock.hasStray && !activeBlock.hasErrors && activeBlock.density > 0.5 && (
-                <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-semibold">
-                  Main Table Cluster
-                </span>
+            {/* Line 2: Sample Data Provision (ALWAYS rendered with fixed single line, no flicker) */}
+            <div className="h-5 flex items-center text-[10px] overflow-hidden">
+              {activeBlock.hasStray ? (
+                <div className="text-amber-300 truncate font-mono flex items-center gap-1.5 w-full">
+                  <span className="text-amber-400 font-sans font-semibold uppercase shrink-0">
+                    ⚠️ Stray Content:
+                  </span>
+                  <span className="truncate">"{activeBlock.previewSample || 'No preview available'}"</span>
+                </div>
+              ) : activeBlock.cellCount > 0 ? (
+                <div className="text-slate-400 truncate flex items-center gap-1.5 w-full">
+                  <span className="text-slate-400 shrink-0">Sample data:</span>
+                  <span className="font-mono text-slate-200 truncate">
+                    "{activeBlock.previewSample || 'Numeric or formula data'}"
+                  </span>
+                </div>
+              ) : (
+                <div className="text-slate-400 truncate flex items-center gap-1.5 w-full">
+                  <span className="text-slate-500 shrink-0">Sample data:</span>
+                  <span className="text-slate-400 font-mono italic">No data (empty cell range)</span>
+                </div>
               )}
             </div>
+          </>
+        ) : (
+          <div className="h-full flex items-center justify-center text-slate-500 text-[11px]">
+            Hover over any cell in the radar to inspect coordinates and data density
           </div>
-
-          {/* Outlier content explanation or sample */}
-          {activeBlock.hasStray && activeBlock.previewSample && (
-            <div className="text-[11px] text-amber-200/90 font-mono bg-amber-950/40 border border-amber-900/50 p-1.5 rounded mt-1 break-all">
-              <span className="text-amber-400 font-sans font-semibold text-[10px] uppercase block mb-0.5">
-                Stray Cell Content:
-              </span>
-              "{activeBlock.previewSample}"
-            </div>
-          )}
-          {!activeBlock.hasStray && activeBlock.previewSample && (
-            <p className="text-[10px] text-slate-400 truncate">
-              Sample data: <span className="font-mono text-slate-300">"{activeBlock.previewSample}"</span>
-            </p>
-          )}
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Footer: Legend & Plain-Language Summary */}
       <div className="pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-[10px] text-slate-400">

@@ -29,8 +29,17 @@ export const TabBreakdown: React.FC<TabBreakdownProps> = ({ sheets }) => {
     return initial;
   });
 
+  const [openHeatmaps, setOpenHeatmaps] = useState<Record<string, boolean>>({});
+
   const toggleExpand = (sheetName: string) => {
     setExpandedSheets((prev) => ({
+      ...prev,
+      [sheetName]: !prev[sheetName],
+    }));
+  };
+
+  const toggleHeatmap = (sheetName: string) => {
+    setOpenHeatmaps((prev) => ({
       ...prev,
       [sheetName]: !prev[sheetName],
     }));
@@ -209,9 +218,37 @@ export const TabBreakdown: React.FC<TabBreakdownProps> = ({ sheets }) => {
 
               {/* Collapsible Details */}
               {isExpanded && (
-                <div className="px-4 pb-4 pt-2 border-t border-slate-100 space-y-4 text-xs">
-                  {/* Spatial Data Heatmap Box */}
-                  <SheetHeatmapBox sheet={sheet} />
+                <div className="px-4 pb-4 pt-3 border-t border-slate-100 space-y-4 text-xs">
+                  {/* Spatial Heatmap Option Button */}
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                        <Grid className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="font-bold text-slate-800 text-xs block">
+                          Worksheet Spatial Heatmap &amp; Radar
+                        </span>
+                        <span className="text-[11px] text-slate-500">
+                          {sheet.heatmap ? `${sheet.heatmap.totalCells} cells • ${sheet.heatmap.mainClusterSummary}` : 'Spatial density map'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => toggleHeatmap(sheet.name)}
+                      className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 font-semibold border border-slate-200 text-xs shadow-2xs transition cursor-pointer flex items-center gap-1.5 shrink-0 self-start sm:self-auto"
+                    >
+                      <Grid className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>{openHeatmaps[sheet.name] ? 'Hide Heatmap' : 'View Heatmap'}</span>
+                    </button>
+                  </div>
+
+                  {openHeatmaps[sheet.name] && (
+                    <div className="animate-in fade-in duration-150">
+                      <SheetHeatmapBox sheet={sheet} />
+                    </div>
+                  )}
 
                   {/* Stray Data Callout */}
                   {sheet.boundary.hasStrayCells && (

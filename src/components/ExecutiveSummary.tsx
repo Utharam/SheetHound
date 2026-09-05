@@ -10,6 +10,8 @@ import {
   CheckCircle2,
   ArrowRight,
   Grid,
+  ChevronUp,
+  ChevronDown,
 } from 'lucide-react';
 import type { WorkbookAuditReport } from '../types/audit';
 import { SheetHeatmapBox } from './SheetHeatmapBox';
@@ -23,6 +25,8 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
   report,
   onNavigateTab,
 }) => {
+  const [showHeatmap, setShowHeatmap] = useState<boolean>(false);
+
   // Default to sheet with stray cells if available, else first sheet
   const defaultSheetIndex = React.useMemo(() => {
     const strayIdx = report.sheets.findIndex((s) => s.boundary.hasStrayCells);
@@ -259,67 +263,54 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
 
       </div>
 
-      {/* Spatial Data Radar Spotlight Section */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
-              <Grid className="w-4 h-4" />
+      {/* Spatial Data Heatmap Option Section (Hidden by Default) */}
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden transition">
+        <div className="p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 text-white">
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-xl shadow-xs shrink-0">
+              🗺️
             </div>
-            <div>
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                Worksheet Spatial Data Radar &amp; Density Spotlight
-                {activeSheet.boundary.hasStrayCells && (
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
-                    Stray Data Detected
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-sm sm:text-base font-bold text-slate-100 tracking-tight">
+                  Worksheet Spatial Data Heatmap &amp; Radar
+                </h3>
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  Optional Tool
+                </span>
+                {report.strayDataWarningCount > 0 && (
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse">
+                    ⚠️ Stray Outliers Detected
                   </span>
                 )}
-              </h3>
-              <p className="text-xs text-slate-500">
-                Visualizing data clusters, empty margins, and isolated scratchpads across tabs
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Inspect 2D visual maps of where data is accumulated, scattered, or isolated across all {report.totalSheets} tabs.
               </p>
             </div>
           </div>
 
           <button
-            onClick={() => onNavigateTab('tabs')}
-            className="text-xs font-semibold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 cursor-pointer self-start sm:self-auto"
+            onClick={() => setShowHeatmap((prev) => !prev)}
+            className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-xs flex items-center gap-2 cursor-pointer shrink-0 self-start sm:self-auto"
           >
-            <span>Explore All {report.totalSheets} Tabs</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <Grid className="w-4 h-4" />
+            <span>{showHeatmap ? 'Hide Data Heatmap' : 'Open Data Heatmap'}</span>
+            {showHeatmap ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
         </div>
 
-        {/* Tab Switcher Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-          {report.sheets.map((s, idx) => {
-            const isSelected = idx === selectedSheetIdx;
-            return (
-              <button
-                key={s.id}
-                onClick={() => setSelectedSheetIdx(idx)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 shrink-0 ${
-                  isSelected
-                    ? 'bg-slate-900 text-white shadow-2xs'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                }`}
-              >
-                <span>{s.name}</span>
-                {s.boundary.hasStrayCells && (
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" title="Contains stray cells" />
-                )}
-                {s.errorCount > 0 && (
-                  <span className="w-2 h-2 rounded-full bg-rose-500" title="Contains errors" />
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Render Active Sheet Heatmap */}
-        {activeSheet && (
-          <div className="pt-1">
-            <SheetHeatmapBox sheet={activeSheet} />
+        {/* Collapsible Heatmap Drawer with Tab Circling */}
+        {showHeatmap && (
+          <div className="p-5 sm:p-6 border-t border-slate-200 bg-slate-50/50 space-y-4 animate-in fade-in duration-200">
+            {activeSheet && (
+              <SheetHeatmapBox
+                sheet={activeSheet}
+                allSheets={report.sheets}
+                currentSheetIndex={selectedSheetIdx}
+                onSelectSheet={(newIdx) => setSelectedSheetIdx(newIdx)}
+              />
+            )}
           </div>
         )}
       </div>

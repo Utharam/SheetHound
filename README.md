@@ -1,7 +1,7 @@
 # 🐕 SheetHound
 
 > **The Spreadsheet Watchdog** — Sniffing Out Ghost Links, Leaks & Stray Cells  
-> *Created with care by [Utharam](https://utharam.github.io/)* • *Dedicated to **Veeran, the Indian Spitz** 🐾*
+> *Created with care by [Utharam](https://utharam.github.io/)* • *Part of the **Spreadsheet Zoo** ([LedgerDuck 🦆](https://utharam.github.io/LedgerDuck/), [SheetHound 🐕](https://sheethound.utharam.workers.dev/), [SheetMonkey 🐒](https://utharam.github.io/excel-cleaner/))* • *Dedicated to **Veeran, the Indian Spitz** 🐾*
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-sheethound.utharam.workers.dev-amber?style=for-the-badge&logo=cloudflare)](https://sheethound.utharam.workers.dev/)
 [![Privacy Guaranteed](https://img.shields.io/badge/Privacy-100%25%20In--Browser%20Memory-emerald.svg)](#-100-in-browser-privacy--safety)
@@ -151,7 +151,7 @@ SheetHound is deployed to Cloudflare Workers Static Assets with automated GitHub
 
 ---
 
-## 📄 License & Credits
+## 📄 License & Intellectual Property
 
-Created by **[Utharam](https://utharam.github.io/)**.  
-All rights reserved.
+This project is proprietary and all rights are reserved by **[Utharam](https://utharam.github.io/)**.  
+The source code is made publicly available for transparency, security auditing, and personal evaluation to verify our 100% in-browser privacy guarantee. See [`LICENSE`](./LICENSE) for full legal terms.

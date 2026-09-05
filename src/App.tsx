@@ -337,7 +337,7 @@ export function App() {
               <span className="text-slate-300">•</span>
               <span>The Spreadsheet Watchdog</span>
             </div>
-            <p className="text-slate-400 text-[11px] flex items-center justify-center sm:justify-start gap-1">
+            <p className="text-slate-400 text-[11px] flex items-center justify-center sm:justify-start gap-1 flex-wrap">
               <span>Created with care by</span>
               <a
                 href="https://utharam.github.io/"
@@ -357,6 +357,30 @@ export function App() {
               >
                 🐾
               </button>
+              <span className="text-slate-300 mx-1">—</span>
+              <span>Part of the Spreadsheet Zoo (</span>
+              <a
+                href="https://utharam.github.io/LedgerDuck/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-slate-600 hover:text-amber-800 underline underline-offset-2 transition cursor-pointer"
+                title="LedgerDuck - Balance & Ledger Reconciliation"
+              >
+                LedgerDuck 🦆
+              </a>
+              <span className="text-slate-400">, </span>
+              <span className="font-bold text-amber-800">SheetHound 🐕</span>
+              <span className="text-slate-400">, </span>
+              <a
+                href="https://utharam.github.io/excel-cleaner/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-slate-600 hover:text-amber-800 underline underline-offset-2 transition cursor-pointer"
+                title="SheetMonkey - The Spreadsheet Grunt Work Engine"
+              >
+                SheetMonkey 🐒
+              </a>
+              <span>)</span>
             </p>
           </div>
 

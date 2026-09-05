@@ -7,8 +7,10 @@ import type {
   FormulaDirectoryItem,
   FormulaErrorItem,
   FormulaErrorType,
+  HeatmapBlock,
   SheetAudit,
   SheetBoundary,
+  SheetHeatmapData,
   SheetVisibility,
   WorkbookAuditReport,
 } from '../types/audit';
@@ -28,6 +30,167 @@ export function colToLetter(col: number): string {
   }
   return letter;
 }
+
+export interface PopulatedCellMeta {
+  addr: string;
+  row: number;
+  col: number;
+  preview: string;
+}
+
+/**
+ * Builds an adaptive 2D spatial density matrix and stray radar for a worksheet.
+ */
+export function buildSheetHeatmap(
+  populatedCells: PopulatedCellMeta[],
+  maxRow: number,
+  maxCol: number,
+  errors: FormulaErrorItem[],
+  boundary: SheetBoundary
+): SheetHeatmapData {
+  if (populatedCells.length === 0 || maxRow === 0 || maxCol === 0) {
+    return {
+      gridRows: 8,
+      gridCols: 16,
+      totalCells: 0,
+      maxBlockCount: 0,
+      matrix: [],
+      mainClusterSummary: 'Empty sheet (0 populated cells)',
+      mainClusterBounds: {
+        rowStart: 0,
+        rowEnd: 0,
+        colStart: 0,
+        colEnd: 0,
+        colStartLetter: '—',
+        colEndLetter: '—',
+        percentageOfData: 0,
+      },
+    };
+  }
+
+  // Adaptive grid dimensions: 12-24 cols, 6-12 rows
+  const gridCols = Math.min(24, Math.max(12, maxCol));
+  const gridRows = Math.min(12, Math.max(6, maxRow));
+
+  const matrix: HeatmapBlock[][] = [];
+  for (let r = 0; r < gridRows; r++) {
+    const rowBlocks: HeatmapBlock[] = [];
+    const rStart = Math.floor((r * maxRow) / gridRows) + 1;
+    const rEnd = Math.floor(((r + 1) * maxRow) / gridRows);
+
+    for (let c = 0; c < gridCols; c++) {
+      const cStart = Math.floor((c * maxCol) / gridCols) + 1;
+      const cEnd = Math.floor(((c + 1) * maxCol) / gridCols);
+
+      rowBlocks.push({
+        rowIdx: r,
+        colIdx: c,
+        rowStart: rStart,
+        rowEnd: Math.max(rStart, rEnd),
+        colStart: cStart,
+        colEnd: Math.max(cStart, cEnd),
+        colStartLetter: colToLetter(cStart),
+        colEndLetter: colToLetter(Math.max(cStart, cEnd)),
+        cellCount: 0,
+        density: 0,
+        hasFormulas: false,
+        hasErrors: false,
+        errorCount: 0,
+        hasStray: false,
+      });
+    }
+    matrix.push(rowBlocks);
+  }
+
+  const errorCoords = new Map<string, FormulaErrorItem>();
+  errors.forEach((err) => {
+    errorCoords.set(`${err.row}:${err.col}`, err);
+  });
+
+  let maxBlockCount = 0;
+  populatedCells.forEach((cell) => {
+    const rBin = Math.min(gridRows - 1, Math.floor(((cell.row - 1) / maxRow) * gridRows));
+    const cBin = Math.min(gridCols - 1, Math.floor(((cell.col - 1) / maxCol) * gridCols));
+
+    const block = matrix[rBin][cBin];
+    block.cellCount++;
+    if (!block.previewSample && cell.preview) {
+      block.previewSample = cell.preview;
+    }
+    if (cell.preview && cell.preview.startsWith('=')) {
+      block.hasFormulas = true;
+    }
+
+    if (errorCoords.has(`${cell.row}:${cell.col}`)) {
+      block.hasErrors = true;
+      block.errorCount++;
+    }
+
+    if (block.cellCount > maxBlockCount) {
+      maxBlockCount = block.cellCount;
+    }
+  });
+
+  // Flag stray outlier block
+  let strayOutlierSummary: string | undefined = undefined;
+  if (boundary.hasStrayCells && boundary.farthestRow && boundary.farthestCol) {
+    const sRBin = Math.min(gridRows - 1, Math.floor(((boundary.farthestRow - 1) / maxRow) * gridRows));
+    const sCBin = Math.min(gridCols - 1, Math.floor(((boundary.farthestCol - 1) / maxCol) * gridCols));
+    const strayBlock = matrix[sRBin][sCBin];
+    strayBlock.hasStray = true;
+    strayBlock.strayCellAddress = boundary.farthestCell;
+    if (boundary.farthestCellValue) {
+      strayBlock.previewSample = boundary.farthestCellValue;
+    }
+    const distanceRows = maxRow - (boundary.farthestRow === maxRow ? 40 : 0);
+    strayOutlierSummary = `Isolated stray cell at ${boundary.farthestCell} (${boundary.farthestCellValue ? `"${boundary.farthestCellValue}"` : 'populated'}), isolated ~${distanceRows} rows away from the main data block.`;
+  }
+
+  // Calculate density
+  for (let r = 0; r < gridRows; r++) {
+    for (let c = 0; c < gridCols; c++) {
+      const block = matrix[r][c];
+      block.density = maxBlockCount > 0 ? Number((block.cellCount / maxBlockCount).toFixed(3)) : 0;
+    }
+  }
+
+  // Calculate 90% main cluster bounds
+  const sortedRows = populatedCells.map((c) => c.row).sort((a, b) => a - b);
+  const sortedCols = populatedCells.map((c) => c.col).sort((a, b) => a - b);
+  const pMinRow = sortedRows[0] || 1;
+  const pMaxRow = sortedRows[Math.floor(sortedRows.length * 0.9)] || maxRow;
+  const pMinCol = sortedCols[0] || 1;
+  const pMaxCol = sortedCols[Math.floor(sortedCols.length * 0.9)] || maxCol;
+
+  const clusterCellsCount = populatedCells.filter(
+    (c) => c.row >= pMinRow && c.row <= pMaxRow && c.col >= pMinCol && c.col <= pMaxCol
+  ).length;
+  const clusterPct = Math.round((clusterCellsCount / populatedCells.length) * 100);
+
+  const mainClusterBounds = {
+    rowStart: pMinRow,
+    rowEnd: pMaxRow,
+    colStart: pMinCol,
+    colEnd: pMaxCol,
+    colStartLetter: colToLetter(pMinCol),
+    colEndLetter: colToLetter(pMaxCol),
+    percentageOfData: clusterPct,
+  };
+
+  const mainClusterSummary = `Rows ${pMinRow}–${pMaxRow}, Cols ${colToLetter(pMinCol)}–${colToLetter(pMaxCol)} contain ${clusterPct}% of all data (${clusterCellsCount} of ${populatedCells.length} cells).`;
+
+  return {
+    gridRows,
+    gridCols,
+    totalCells: populatedCells.length,
+    maxBlockCount,
+    matrix,
+    mainClusterSummary,
+    strayOutlierSummary,
+    mainClusterBounds,
+  };
+}
+
 /**
 
  * Parses raw OpenXML files inside the .xlsx package using JSZip to reliably detect:
@@ -139,9 +302,9 @@ export async function auditExcelWorkbook(
 
     let sheetFormulaCount = 0;
 
-    const populatedCellsMap = new Map<string, { addr: string; row: number; col: number; preview: string }>();
-    let maxRowCell: { addr: string; row: number; col: number; preview: string } | null = null;
-    let maxColCell: { addr: string; row: number; col: number; preview: string } | null = null;
+    const populatedCellsMap = new Map<string, PopulatedCellMeta>();
+    let maxRowCell: PopulatedCellMeta | null = null;
+    let maxColCell: PopulatedCellMeta | null = null;
 
     sheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
       row.eachCell({ includeEmpty: false }, (cell, colNumber) => {
@@ -389,15 +552,9 @@ export async function auditExcelWorkbook(
     let hasStrayCells = false;
     let isIsolatedStray = false;
     let strayExplanation: string | undefined = undefined;
-    interface PopulatedCellMeta {
-      addr: string;
-      row: number;
-      col: number;
-      preview: string;
-    }
 
-    const vCell = maxRowCell as PopulatedCellMeta | null;
-    const hCell = maxColCell as PopulatedCellMeta | null;
+    const vCell = maxRowCell as unknown as PopulatedCellMeta | null;
+    const hCell = maxColCell as unknown as PopulatedCellMeta | null;
     let primaryFarthestCell: PopulatedCellMeta | null = vCell || hCell;
     let nearbyCount = 0;
 
@@ -463,6 +620,14 @@ export async function auditExcelWorkbook(
       strayCellExplanation: strayExplanation,
     };
 
+    const heatmap = buildSheetHeatmap(
+      Array.from(populatedCellsMap.values()),
+      maxR,
+      maxC,
+      sheetErrors,
+      boundary
+    );
+
     sheetAudits.push({
       id: idx + 1,
       name: sheet.name,
@@ -477,6 +642,7 @@ export async function auditExcelWorkbook(
       externalLinks: sheetExternalLinks,
       fonts: Array.from(sheetFonts),
       colors: Array.from(sheetColors),
+      heatmap,
     });
   });
 

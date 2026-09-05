@@ -85,8 +85,41 @@ async function runVerification() {
     passed = false;
   }
 
+  // Check 7: Heatmap computed for each sheet
+  const allSheetsHaveHeatmap = report.sheets.every(
+    (s) => s.heatmap && s.heatmap.gridRows > 0 && s.heatmap.gridCols > 0
+  );
+  if (allSheetsHaveHeatmap) {
+    console.log(`✅ Check 7 Passed: Spatial heatmaps computed for all ${report.sheets.length} sheets.`);
+  } else {
+    console.error('❌ Check 7 Failed: Some sheets are missing heatmap data.');
+    passed = false;
+  }
+
+  // Check 8: Stray outlier cell detected in heatmap matrix
+  const straySheet = report.sheets.find((s) => s.boundary.hasStrayCells);
+  const foundStrayInHeatmap = straySheet?.heatmap?.matrix.some((row) =>
+    row.some((b) => b.hasStray && b.strayCellAddress === 'W180')
+  );
+  if (foundStrayInHeatmap) {
+    console.log('✅ Check 8 Passed: Stray outlier W180 correctly pinned in spatial heatmap radar.');
+  } else {
+    console.error('❌ Check 8 Failed: Outlier block with W180 not found in heatmap matrix.');
+    passed = false;
+  }
+
+  // Check 9: Main cluster density bounds computed
+  if (straySheet?.heatmap?.mainClusterBounds && straySheet.heatmap.mainClusterBounds.percentageOfData > 70) {
+    console.log(
+      `✅ Check 9 Passed: Primary cluster identified with ${straySheet.heatmap.mainClusterBounds.percentageOfData}% of data in ${straySheet.heatmap.mainClusterBounds.colStartLetter}${straySheet.heatmap.mainClusterBounds.rowStart}..${straySheet.heatmap.mainClusterBounds.colEndLetter}${straySheet.heatmap.mainClusterBounds.rowEnd}.`
+    );
+  } else {
+    console.error('❌ Check 9 Failed: Main cluster bounds not computed properly.');
+    passed = false;
+  }
+
   if (passed) {
-    console.log('\n🎉 ALL 6 VERIFICATION CHECKS PASSED!\n');
+    console.log('\n🎉 ALL 9 VERIFICATION CHECKS PASSED!\n');
     process.exit(0);
   } else {
     console.error('\n❌ SOME CHECKS FAILED!\n');

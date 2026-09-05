@@ -8,8 +8,10 @@ import {
   Maximize2,
   ChevronDown,
   ChevronRight,
+  Grid,
 } from 'lucide-react';
 import type { SheetAudit } from '../types/audit';
+import { SheetHeatmapBox } from './SheetHeatmapBox';
 
 interface TabBreakdownProps {
   sheets: SheetAudit[];
@@ -163,6 +165,22 @@ export const TabBreakdown: React.FC<TabBreakdownProps> = ({ sheets }) => {
 
                 {/* Quick Indicators on right */}
                 <div className="flex items-center gap-2 self-start md:self-center">
+                  {sheet.heatmap && sheet.heatmap.totalCells > 0 && (
+                    <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-medium border border-slate-200 shadow-2xs">
+                      <Grid className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>{sheet.heatmap.totalCells} cells</span>
+                      {sheet.boundary.hasStrayCells ? (
+                        <span className="text-amber-700 font-bold bg-amber-100/80 px-1.5 py-0.2 rounded text-[10px]">
+                          ⚠️ Stray Outlier
+                        </span>
+                      ) : (
+                        <span className="text-emerald-700 font-semibold text-[10px]">
+                          ✓ Clustered
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   {sheet.fonts.length > 0 && (
                     <div className="text-[11px] text-slate-500 bg-slate-100 px-2 py-1 rounded">
                       {sheet.fonts.slice(0, 2).join(', ')}
@@ -191,8 +209,10 @@ export const TabBreakdown: React.FC<TabBreakdownProps> = ({ sheets }) => {
 
               {/* Collapsible Details */}
               {isExpanded && (
-                <div className="px-4 pb-4 pt-1 border-t border-slate-100 space-y-4 text-xs">
-                  
+                <div className="px-4 pb-4 pt-2 border-t border-slate-100 space-y-4 text-xs">
+                  {/* Spatial Data Heatmap Box */}
+                  <SheetHeatmapBox sheet={sheet} />
+
                   {/* Stray Data Callout */}
                   {sheet.boundary.hasStrayCells && (
                     <div className="p-3.5 rounded-lg bg-purple-50 border border-purple-200 text-purple-900 flex items-start gap-3">

@@ -76,11 +76,12 @@ export function generateMarkdownReport(report: WorkbookAuditReport): string {
 
   // Worksheets & Stray Data Section
   lines.push(`---`);
-  lines.push(`## 📑 Worksheets & Stray Boundary Breakdown`);
-  lines.push(`\n| Sheet Name | State | Boundary | Farthest Cell | Stray Data Alert | Errors |`);
+  lines.push(`## 📑 Worksheets & Spatial Density Breakdown`);
+  lines.push(`\n| Sheet Name | State | Boundary | Farthest Cell | Spatial Cluster / Stray Status | Errors |`);
   lines.push(`| :--- | :--- | :--- | :--- | :--- | :--- |`);
   report.sheets.forEach((s) => {
-    const strayStr = s.boundary.hasStrayCells ? `⚠️ **STRAY DETECTED** (${s.boundary.nearbyCellsCount} nearby)` : 'Clean';
+    const clusterStr = s.heatmap ? `${s.heatmap.mainClusterBounds.colStartLetter}${s.heatmap.mainClusterBounds.rowStart}..${s.heatmap.mainClusterBounds.colEndLetter}${s.heatmap.mainClusterBounds.rowEnd} (${s.heatmap.mainClusterBounds.percentageOfData}%)` : '—';
+    const strayStr = s.boundary.hasStrayCells ? `⚠️ **STRAY OUTLIER** (${s.boundary.farthestCell})` : `✓ Clustered (${clusterStr})`;
     lines.push(`| **${s.name}** | \`${s.visibility}\` | \`Row 1..${s.boundary.maxRow}, Col 1..${s.boundary.maxCol}\` | \`${s.boundary.farthestCell}\` | ${strayStr} | ${s.errorCount} |`);
   });
   lines.push(``);
@@ -481,8 +482,8 @@ export function generatePrintableHtml(report: WorkbookAuditReport): string {
           <td class="mono"><strong>${s.boundary.farthestCell}</strong></td>
           <td>
             ${s.boundary.hasStrayCells 
-              ? `<span class="badge badge-warning">Stray Cell Alert</span> <span style="font-size: 7.5pt; color: #64748b;">${s.boundary.nearbyCellsCount ?? 0} nearby cells</span>` 
-              : '<span style="color: #166534; font-size: 7.5pt;">✓ Clustered</span>'}
+              ? `<span class="badge badge-warning">Stray Alert: ${s.boundary.farthestCell}</span> <span style="font-size: 7.5pt; color: #64748b;">(Cluster: ${s.heatmap?.mainClusterBounds.colStartLetter || ''}${s.heatmap?.mainClusterBounds.rowStart || 1}..${s.heatmap?.mainClusterBounds.colEndLetter || ''}${s.heatmap?.mainClusterBounds.rowEnd || 1})</span>` 
+              : `<span style="color: #166534; font-size: 7.5pt;">✓ Clustered in ${s.heatmap?.mainClusterBounds.colStartLetter || ''}${s.heatmap?.mainClusterBounds.rowStart || 1}..${s.heatmap?.mainClusterBounds.colEndLetter || ''}${s.heatmap?.mainClusterBounds.rowEnd || 1} (${s.heatmap?.mainClusterBounds.percentageOfData || 100}%)</span>`}
           </td>
           <td>${s.formulaCount}</td>
         </tr>

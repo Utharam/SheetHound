@@ -86,6 +86,44 @@ export interface SheetBoundary {
   strayCellExplanation?: string;
 }
 
+export interface HeatmapBlock {
+  rowIdx: number;
+  colIdx: number;
+  rowStart: number;
+  rowEnd: number;
+  colStart: number;
+  colEnd: number;
+  colStartLetter: string;
+  colEndLetter: string;
+  cellCount: number;
+  density: number; // 0.0 to 1.0 relative to peak bin
+  hasFormulas: boolean;
+  hasErrors: boolean;
+  errorCount: number;
+  hasStray: boolean;
+  strayCellAddress?: string;
+  previewSample?: string;
+}
+
+export interface SheetHeatmapData {
+  gridRows: number;
+  gridCols: number;
+  totalCells: number;
+  maxBlockCount: number;
+  matrix: HeatmapBlock[][];
+  mainClusterSummary: string;
+  strayOutlierSummary?: string;
+  mainClusterBounds: {
+    rowStart: number;
+    rowEnd: number;
+    colStart: number;
+    colEnd: number;
+    colStartLetter: string;
+    colEndLetter: string;
+    percentageOfData: number;
+  };
+}
+
 export interface SheetAudit {
   id: number;
   name: string;
@@ -100,6 +138,7 @@ export interface SheetAudit {
   externalLinks: ExternalLinkItem[];
   fonts: string[];
   colors: string[];
+  heatmap?: SheetHeatmapData;
 }
 
 export interface WorkbookAuditReport {

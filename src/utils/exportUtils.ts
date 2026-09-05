@@ -93,7 +93,7 @@ export function generateMarkdownReport(report: WorkbookAuditReport): string {
   lines.push(`- **Color Palette (Top 6):** ${report.colorPalette.slice(0, 6).map((c) => `\`${c.hex}\` (${c.count} cells)`).join(', ')}\n`);
 
   lines.push(`---`);
-  lines.push(`*Audited by SheetHound • by Utharam (https://utharam.github.io/) • Dedicated to Veeran the Indian Spitz 🐾*`);
+  lines.push(`*Audited by SheetHound • by Utharam (https://utharam.github.io/)*`);
 
   return lines.join('\n');
 }
@@ -501,7 +501,7 @@ export function generatePrintableHtml(report: WorkbookAuditReport): string {
   <!-- Document Footer -->
   <div class="footer">
     <div>
-      Audited by <strong>SheetHound</strong> • by <a href="https://utharam.github.io/" style="color:#0f172a; text-decoration:none;"><strong>Utharam</strong></a> • Dedicated to Veeran the Indian Spitz 🐾
+      Audited by <strong>SheetHound</strong> • by <a href="https://utharam.github.io/" style="color:#0f172a; text-decoration:none;"><strong>Utharam</strong></a>
     </div>
     <div>
       🔒 Client-Side In-Browser Audit • Confidentiality Guaranteed

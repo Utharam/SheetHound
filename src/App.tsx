@@ -112,7 +112,6 @@ export function App() {
         onResetFile={handleReset}
         onOpenExport={() => setIsExportModalOpen(true)}
         onOpenPrivacyModal={() => setIsPrivacyModalOpen(true)}
-        onOpenVeeranModal={() => setIsVeeranModalOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -333,19 +332,13 @@ export function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div className="space-y-1">
             <div className="flex items-center justify-center sm:justify-start gap-2 font-bold text-slate-800">
-              <button
-                onClick={() => setIsVeeranModalOpen(true)}
-                className="hover:scale-110 transition cursor-pointer"
-                title="Meet Veeran! 🐾"
-              >
-                🐕
-              </button>
+              <span className="text-sm select-none">🐕</span>
               <span>SheetHound</span>
               <span className="text-slate-300">•</span>
               <span>The Spreadsheet Watchdog</span>
             </div>
-            <p className="text-slate-400 text-[11px]">
-              Created with care by{' '}
+            <p className="text-slate-400 text-[11px] flex items-center justify-center sm:justify-start gap-1">
+              <span>Created with care by</span>
               <a
                 href="https://utharam.github.io/"
                 target="_blank"
@@ -354,13 +347,15 @@ export function App() {
                 title="Visit Utharam (utharam.github.io)"
               >
                 Utharam
-              </a>{' '}
-              •{' '}
+              </a>
               <button
+                type="button"
                 onClick={() => setIsVeeranModalOpen(true)}
-                className="text-amber-800/80 hover:text-amber-900 font-semibold underline underline-offset-2 transition cursor-pointer"
+                className="inline-flex items-center justify-center text-xs opacity-50 hover:opacity-100 hover:scale-125 active:scale-95 transition-all duration-150 cursor-pointer p-0.5 ml-0.5 select-none"
+                title="🐾"
+                aria-label="Secret Tribute"
               >
-                Dedicated to Veeran the Indian Spitz 🐾
+                🐾
               </button>
             </p>
           </div>

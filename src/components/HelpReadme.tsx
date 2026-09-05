@@ -121,17 +121,6 @@ export const HelpReadme: React.FC = () => {
           })}
         </div>
 
-        {/* Dedication Card */}
-        <div className="p-5 rounded-2xl bg-amber-50/50 border border-amber-200/80 text-center space-y-1">
-          <div className="text-2xl">🐕 🐾</div>
-          <h4 className="text-xs font-bold text-amber-950 uppercase tracking-wider">
-            Dedicated to Veeran, the Indian Spitz
-          </h4>
-          <p className="text-xs text-amber-800 max-w-lg mx-auto leading-relaxed">
-            Loyal, sharp, and always watchful. SheetHound was built in honor of Veeran to sniff out errors and watch over your spreadsheets before you hit Send.
-          </p>
-        </div>
-
       </div>
     </section>
   );

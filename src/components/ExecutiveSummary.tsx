@@ -62,7 +62,7 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
               <h3 className="text-base font-extrabold text-slate-900 tracking-tight">
                 {hasIssues
                   ? 'Watchdog Notice: Issues detected before distribution'
-                  : 'Clean Bill of Health: Veeran approves this workbook!'}
+                  : 'Clean Bill of Health: SheetHound approves this workbook!'}
               </h3>
               <span
                 className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${

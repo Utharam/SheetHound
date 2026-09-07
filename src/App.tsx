@@ -14,6 +14,7 @@ import { auditExcelWorkbook } from './parser/excelAuditor';
 import { generateDemoWorkbook } from './utils/demoWorkbook';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { ComplianceBar } from './components/ComplianceBar';
 import { BentoGrid } from './components/BentoGrid';
 import { HelpReadme } from './components/HelpReadme';
 import { ExecutiveSummary } from './components/ExecutiveSummary';
@@ -135,13 +136,16 @@ export function App() {
         {/* State 1: Landing Page (When no report is loaded) */}
         {!report ? (
           <div ref={heroRef}>
-            {/* Hero with DropZone */}
+            {/* Hero with Asymmetric 5:7 Layout & Interactive Diagnostic */}
             <Hero
               onFileLoaded={handleFileLoaded}
               onLoadDemo={handleLoadDemo}
               isLoading={isLoading}
               onLearnMore={scrollToBento}
             />
+
+            {/* Institutional Air-Gapped Compliance & Trust Bar */}
+            <ComplianceBar onOpenPrivacyModal={() => setIsPrivacyModalOpen(true)} />
 
             {/* Bento Grid Feature Showcase */}
             <BentoGrid />

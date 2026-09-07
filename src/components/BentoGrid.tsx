@@ -1,209 +1,186 @@
 import React from 'react';
-import { CheckCircle2 } from 'lucide-react';
+import { Map, Link2, EyeOff, FileCode2, Printer } from 'lucide-react';
 
 export const BentoGrid: React.FC = () => {
   return (
-    <section id="features-bento" className="py-16 border-t border-slate-200/80 bg-slate-50/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+    <section id="features-bento" className="py-16 border-t border-slate-200/90 bg-[#F9FAFB]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
         {/* Section Header */}
         <div className="text-center space-y-3 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100/70 text-amber-900 border border-amber-200/80 text-xs font-bold uppercase tracking-wider">
-            <span>🐕</span> Pre-Flight Inspection Suite
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-slate-800 border border-slate-200 text-xs font-bold uppercase tracking-wider shadow-2xs">
+            <span className="text-amber-700 font-mono">[Core Diagnostic Suite]</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-slate-950 tracking-tight">
             Engineered to catch what Excel keeps hidden
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base">
-            SheetHound is your loyal pre-flight watchdog. It inspects every layer of your spreadsheet 
-            before you email it to managers, clients, or investors.
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            SheetHound is an objective, deterministic watchdog. It inspects calculation dependencies, 
+            ghost paths, and spatial outliers before your workbook reaches stakeholders.
           </p>
         </div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           
-          {/* Bento Card 1 (Wide): External Links & #REF! Hunter */}
-          <div className="md:col-span-2 bg-gradient-to-br from-white to-amber-50/40 p-6 sm:p-8 rounded-3xl border border-amber-200/80 shadow-xs space-y-4 relative overflow-hidden group">
+          {/* Bento Card 1 (Wide): Ghost External Links & #REF! Hunter */}
+          <div className="md:col-span-2 bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4 relative overflow-hidden group">
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20 text-2xl">
-                🔗
+              <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-xs text-xl">
+                <Link2 className="w-5 h-5 text-white" />
               </div>
-              <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-200/80 text-amber-900">
-                The Financial Manager Shield
+              <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-200">
+                MODULE: LINK_HUNTER
               </span>
             </div>
 
-            <div className="space-y-1">
-              <h3 className="text-xl font-bold text-slate-900">
+            <div className="space-y-1.5">
+              <h3 className="text-xl font-black text-slate-950 tracking-tight">
                 Ghost External Links &amp; #REF! Breaker Sniffer
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-xl">
-                Formulas pointing to <code className="bg-amber-100/80 px-1 py-0.5 rounded text-amber-900 font-mono text-xs">[2024_Budget.xlsx]</code> work on your PC, 
-                but when emailed to someone else, Excel displays <strong className="text-rose-600">#REF!</strong>. 
-                SheetHound catches every external workbook reference and pinpoints the exact cell coordinates.
+                Formulas pointing to <code className="bg-slate-100 px-1 py-0.5 rounded text-amber-900 font-mono text-xs">[2024_Budget.xlsx]</code> resolve on your local machine, 
+                but explode into <strong className="text-rose-600 font-mono">#REF!</strong> when emailed to leadership. 
+                SheetHound extracts every external reference with sheet names and cell coordinates.
               </p>
             </div>
 
             {/* Visual Mini Mockup */}
-            <div className="p-3 bg-white/90 rounded-2xl border border-amber-200/80 font-mono text-xs text-slate-700 shadow-2xs space-y-1.5">
+            <div className="p-3 bg-slate-50/80 rounded-xl border border-slate-200 font-mono text-xs text-slate-700 space-y-1">
               <div className="flex items-center justify-between text-[11px] text-slate-400">
-                <span>Formula found at Sheet1!D5</span>
-                <span className="text-rose-600 font-bold">Risk: #REF! on recipient's PC</span>
+                <span>Coordinates: Sheet1!D5</span>
+                <span className="text-rose-600 font-bold">Severity: Breaking Dependency</span>
               </div>
-              <div className="text-amber-900 font-semibold truncate">
+              <div className="text-rose-800 font-semibold truncate">
                 ='[C:\FinModel\2024_Master_Budget.xlsx]Summary'!$C$10
               </div>
             </div>
           </div>
 
-          {/* Bento Card 2: Isolated Stray Cell Radar */}
-          <div className="bg-gradient-to-br from-white to-purple-50/40 p-6 sm:p-8 rounded-3xl border border-purple-200/80 shadow-xs space-y-4 relative overflow-hidden group">
+          {/* Bento Card 2: Spatial Data Density Heatmap & Minimap Radar */}
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4 relative overflow-hidden group">
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center shadow-md shadow-purple-600/20 text-2xl">
-                🏝️
+              <div className="w-10 h-10 rounded-xl bg-slate-950 text-white flex items-center justify-center shadow-xs text-xl">
+                <Map className="w-5 h-5 text-amber-400" />
               </div>
-              <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-purple-200/80 text-purple-900">
-                Density Radar
+              <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-800 border border-slate-200">
+                24×12 RADAR
               </span>
             </div>
 
-            <div className="space-y-1">
-              <h3 className="text-lg font-bold text-slate-900">
-                Isolated Stray Cell Radar
+            <div className="space-y-1.5">
+              <h3 className="text-lg font-black text-slate-950 tracking-tight">
+                Spatial Data Density Heatmap
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Uses our <strong>10-cell neighborhood density algorithm</strong> to distinguish between real tables and accidental scratchpad notes dropped 200 rows down.
+                Adaptive canvas minimap showing where tables accumulate and pinpointing stray outlier calculations 150+ rows away.
               </p>
             </div>
 
-            <div className="p-3 bg-white/90 rounded-2xl border border-purple-200/80 text-xs font-mono text-purple-900 shadow-2xs">
-              <span className="font-bold text-[10px] uppercase text-purple-700 block mb-0.5">Cell W180 Content:</span>
-              "scratchpad: check offshore numbers..."
+            {/* Simulated Heatmap Tiles */}
+            <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+              <div className="grid grid-cols-8 gap-1">
+                <div className="h-3 rounded-xs bg-amber-600" title="Dense cluster" />
+                <div className="h-3 rounded-xs bg-amber-500" title="Dense cluster" />
+                <div className="h-3 rounded-xs bg-amber-400" title="Medium cluster" />
+                <div className="h-3 rounded-xs bg-slate-200" />
+                <div className="h-3 rounded-xs bg-slate-200" />
+                <div className="h-3 rounded-xs bg-slate-200" />
+                <div className="h-3 rounded-xs bg-slate-200" />
+                <div className="h-3 rounded-xs bg-rose-500 animate-pulse" title="Stray outlier W180" />
+              </div>
+              <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
+                <span>Cluster: A1..C7 (94%)</span>
+                <span className="text-rose-600 font-bold">Stray: W180</span>
+              </div>
             </div>
           </div>
 
           {/* Bento Card 3: Deep Tab Visibility */}
-          <div className="bg-gradient-to-br from-white to-rose-50/40 p-6 sm:p-8 rounded-3xl border border-rose-200/80 shadow-xs space-y-4 relative overflow-hidden group">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4 relative overflow-hidden group">
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-rose-600 text-white flex items-center justify-center shadow-md shadow-rose-600/20 text-2xl">
-                🕵️
+              <div className="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-xs text-xl">
+                <EyeOff className="w-5 h-5 text-white" />
               </div>
-              <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-rose-200/80 text-rose-900">
-                Deep Inspection
+              <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md bg-rose-100 text-rose-900 border border-rose-200">
+                VBA / XML AUDIT
               </span>
             </div>
 
-            <div className="space-y-1">
-              <h3 className="text-lg font-bold text-slate-900">
+            <div className="space-y-1.5">
+              <h3 className="text-lg font-black text-slate-950 tracking-tight">
                 xlSheetVeryHidden Unmasker
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Standard Excel hides <code className="bg-rose-100 px-1 py-0.5 rounded text-rose-800 text-[11px]">xlSheetVeryHidden</code> tabs completely. 
-                SheetHound unpacks the raw workbook XML to reveal sensitive payroll, draft, or internal calculation sheets.
+                Standard Excel completely conceals <code className="bg-rose-50 px-1 py-0.5 rounded text-rose-800 text-[11px] font-mono">xlSheetVeryHidden</code> tabs. 
+                SheetHound parses raw workbook XML to unmask hidden payroll, margin, or cap table sheets.
               </p>
             </div>
 
-            <div className="flex items-center gap-2 text-xs">
-              <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold text-[11px]">Visible</span>
-              <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-semibold text-[11px]">Hidden</span>
-              <span className="px-2 py-0.5 rounded-full bg-rose-200 text-rose-900 font-bold text-[11px] animate-pulse">Very Hidden</span>
+            <div className="flex items-center gap-1.5 text-xs font-mono">
+              <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold text-[10px]">Visible</span>
+              <span className="px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 font-semibold text-[10px]">Hidden</span>
+              <span className="px-2 py-0.5 rounded bg-rose-100 text-rose-900 border border-rose-300 font-bold text-[10px] animate-pulse">VeryHidden</span>
             </div>
           </div>
 
           {/* Bento Card 4 (Wide): Formula Directory & Linking Map */}
-          <div className="md:col-span-2 bg-gradient-to-br from-white to-blue-50/40 p-6 sm:p-8 rounded-3xl border border-blue-200/80 shadow-xs space-y-4 relative overflow-hidden group">
+          <div className="md:col-span-2 bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4 relative overflow-hidden group">
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-600/20 text-2xl">
-                🗺️
+              <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs text-xl">
+                <FileCode2 className="w-5 h-5 text-amber-400" />
               </div>
-              <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-blue-200/80 text-blue-900">
-                Full Index
+              <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-800 border border-slate-200">
+                CROSS-SHEET MAP
               </span>
             </div>
 
-            <div className="space-y-1">
-              <h3 className="text-xl font-bold text-slate-900">
-                Searchable Formula Directory &amp; Linking Map
+            <div className="space-y-1.5">
+              <h3 className="text-xl font-black text-slate-950 tracking-tight">
+                Searchable Formula Directory &amp; Dependency Index
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-xl">
-                A complete catalog of every single formula in your workbook. Filter by sheet, search for functions (e.g. <code className="bg-blue-100 px-1 py-0.5 rounded text-blue-900 font-mono text-xs">XLOOKUP</code>), 
-                and see cross-sheet dependency tags indicating which tabs feed each calculation.
+                Search, filter, and inspect every formula across every worksheet. Pinpoint cross-sheet dependencies (e.g. <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-800 font-mono text-xs">XLOOKUP</code>, <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-800 font-mono text-xs">INDEX/MATCH</code>) to verify calculation continuity.
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <div className="p-2.5 bg-white/90 rounded-xl border border-blue-200/80">
-                <span className="text-slate-400 block text-[10px]">Sheet1!C1</span>
-                <span className="font-semibold text-slate-800">=A1 + B2</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+              <div className="p-2.5 bg-slate-50/80 rounded-xl border border-slate-200">
+                <span className="text-slate-400 block text-[10px]">Direct Precedent</span>
+                <span className="font-semibold text-slate-900">=A1 + B2</span>
               </div>
-              <div className="p-2.5 bg-white/90 rounded-xl border border-blue-200/80">
-                <span className="text-blue-600 block text-[10px] font-sans font-semibold">🔗 Cross-Sheet: Q3_Data</span>
-                <span className="font-semibold text-slate-800">='Q3_Data'!C4 * 1.08</span>
+              <div className="p-2.5 bg-slate-50/80 rounded-xl border border-slate-200">
+                <span className="text-amber-700 block text-[10px] font-sans font-bold">🔗 Cross-Tab Reference: Q3_Data</span>
+                <span className="font-semibold text-slate-900">='Q3_Data'!C4 * 1.08</span>
               </div>
             </div>
           </div>
 
-          {/* Bento Card 5: Typography & Color Swatch Board */}
-          <div className="bg-gradient-to-br from-white to-emerald-50/40 p-6 sm:p-8 rounded-3xl border border-emerald-200/80 shadow-xs space-y-4 relative overflow-hidden group">
+          {/* Bento Card 5: Executive Print & Multi-Format Export */}
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4 relative overflow-hidden group">
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-600/20 text-2xl">
-                🎨
+              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs text-xl">
+                <Printer className="w-5 h-5 text-white" />
               </div>
-              <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-200/80 text-emerald-900">
-                Style Audit
+              <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-900 border border-emerald-200">
+                EXECUTIVE EXPORT
               </span>
             </div>
 
-            <div className="space-y-1">
-              <h3 className="text-lg font-bold text-slate-900">
-                Color Palette &amp; Font Audit
+            <div className="space-y-1.5">
+              <h3 className="text-lg font-black text-slate-950 tracking-tight">
+                Standalone Print &amp; PDF Certificate
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Extracts all brand colors with HEX swatches and checks font consistency to ensure you don't violate brand guidelines or exceed Excel's 64k style limit.
+                Dedicated print-to-PDF engine with custom print stylesheets, clean A4/letter page breaks, and zero website chrome for board distribution.
               </p>
             </div>
 
-            <div className="flex items-center gap-1.5 pt-1">
-              <div className="w-6 h-6 rounded-lg bg-[#1F4E78] shadow-xs border border-white" title="#1F4E78" />
-              <div className="w-6 h-6 rounded-lg bg-[#2E75B6] shadow-xs border border-white" title="#2E75B6" />
-              <div className="w-6 h-6 rounded-lg bg-[#385723] shadow-xs border border-white" title="#385723" />
-              <div className="w-6 h-6 rounded-lg bg-[#D9E1F2] shadow-xs border border-white" title="#D9E1F2" />
-              <span className="text-[11px] text-slate-500 font-mono pl-1">+ copy HEX</span>
-            </div>
-          </div>
-
-          {/* Bento Card 6 (Full Width or span 2): Privacy Fortress */}
-          <div className="md:col-span-2 bg-gradient-to-br from-slate-900 to-slate-800 p-6 sm:p-8 rounded-3xl text-white shadow-md space-y-4 relative overflow-hidden">
-            <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-2xl">
-                🛡️
-              </div>
-              <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                100% In-Browser Privacy
-              </span>
-            </div>
-
-            <div className="space-y-1">
-              <h3 className="text-xl font-bold text-white">
-                Zero Cloud Uploads. Confidential Financials Stay on Your Machine.
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
-                Corporate finance requires strict confidentiality. SheetHound never uploads your files to any remote server or cloud. 
-                Everything is processed right inside your browser's memory using JavaScript and WebAssembly.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-4 text-xs text-slate-400 flex-wrap pt-1">
-              <span className="flex items-center gap-1.5 text-emerald-300 font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Client-Side Only
-              </span>
-              <span className="flex items-center gap-1.5 text-emerald-300 font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> No Backend Databases
-              </span>
-              <span className="flex items-center gap-1.5 text-emerald-300 font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Pure Read-Only Watcher
-              </span>
+            <div className="flex items-center gap-2 text-[11px] font-mono text-slate-500 pt-1">
+              <span className="px-2 py-0.5 rounded bg-slate-100 border border-slate-200">.pdf</span>
+              <span className="px-2 py-0.5 rounded bg-slate-100 border border-slate-200">.html</span>
+              <span className="px-2 py-0.5 rounded bg-slate-100 border border-slate-200">.md</span>
+              <span className="px-2 py-0.5 rounded bg-slate-100 border border-slate-200">.json</span>
             </div>
           </div>
 

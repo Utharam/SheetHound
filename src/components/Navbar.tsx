@@ -2,7 +2,6 @@ import React from 'react';
 import {
   ShieldCheck,
   HelpCircle,
-  ArrowRight,
   FileSpreadsheet,
   FileDown,
   RefreshCw,
@@ -10,7 +9,6 @@ import {
 import type { WorkbookAuditReport } from '../types/audit';
 
 interface NavbarProps {
-  onGoToUpload?: () => void;
   onGoToDocs?: () => void;
   onGoToBento?: () => void;
   report: WorkbookAuditReport | null;
@@ -21,7 +19,6 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
-  onGoToUpload,
   onGoToDocs,
   onGoToBento,
   report,
@@ -112,7 +109,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 href="https://github.com/Utharam/SheetHound"
                 target="_blank"
                 rel="noreferrer"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition"
                 title="View on GitHub"
               >
                 <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -120,14 +117,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </svg>
                 <span>Star on GitHub</span>
               </a>
-
-              <button
-                onClick={onGoToUpload}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs hover:shadow cursor-pointer"
-              >
-                <span>Audit a Sheet</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
             </div>
           </>
         ) : (

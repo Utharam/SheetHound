@@ -15,8 +15,7 @@ import { generateDemoWorkbook } from './utils/demoWorkbook';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ComplianceBar } from './components/ComplianceBar';
-import { BentoGrid } from './components/BentoGrid';
-import { HelpReadme } from './components/HelpReadme';
+import { KnowledgeAndDiagnosticHub } from './components/KnowledgeAndDiagnosticHub';
 import { ExecutiveSummary } from './components/ExecutiveSummary';
 import { TabBreakdown } from './components/TabBreakdown';
 import { FormulaDirectory } from './components/FormulaDirectory';
@@ -37,6 +36,8 @@ export function App() {
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isVeeranModalOpen, setIsVeeranModalOpen] = useState(false);
+  const [hubTab, setHubTab] = useState<'suite' | 'handbook' | null>(null);
+  const [hubKey, setHubKey] = useState<number>(0);
 
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -83,21 +84,21 @@ export function App() {
   };
 
   const scrollToBento = () => {
-    const el = document.getElementById('features-bento');
-    el?.scrollIntoView({ behavior: 'smooth' });
+    setHubTab('suite');
+    setHubKey((k) => k + 1);
+    setTimeout(() => {
+      const el = document.getElementById('features-bento');
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
   };
 
   const scrollToDocs = () => {
-    const el = document.getElementById('docs-faq');
-    el?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const scrollToUpload = () => {
-    if (report) {
-      handleReset();
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    setHubTab('handbook');
+    setHubKey((k) => k + 1);
+    setTimeout(() => {
+      const el = document.getElementById('features-bento');
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
   };
 
   return (
@@ -105,7 +106,6 @@ export function App() {
       
       {/* Unified Top Navigation (Eliminates Duplicate Header Repetition!) */}
       <Navbar
-        onGoToUpload={scrollToUpload}
         onGoToDocs={scrollToDocs}
         onGoToBento={scrollToBento}
         report={report}
@@ -147,11 +147,8 @@ export function App() {
             {/* Institutional Air-Gapped Compliance & Trust Bar */}
             <ComplianceBar onOpenPrivacyModal={() => setIsPrivacyModalOpen(true)} />
 
-            {/* Bento Grid Feature Showcase */}
-            <BentoGrid />
-
-            {/* Readme, Handbook & FAQs */}
-            <HelpReadme />
+            {/* Knowledge & Diagnostic Hub with Balanced 6-Engine Grid & Handbook */}
+            <KnowledgeAndDiagnosticHub key={hubKey} initialTab={hubTab} />
           </div>
         ) : (
           /* State 2: Active Audit Dashboard (Single Clean Header Bar!) */

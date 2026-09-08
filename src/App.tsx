@@ -341,11 +341,11 @@ export function App() {
             <p className="text-slate-400 text-[11px] flex items-center justify-center sm:justify-start gap-1 flex-wrap">
               <span>Created with care by</span>
               <a
-                href="https://utharam.github.io/"
+                href="https://utharam.in/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-bold text-slate-700 hover:text-amber-800 underline underline-offset-2 transition cursor-pointer"
-                title="Visit Utharam (utharam.github.io)"
+                title="Visit Utharam (utharam.in)"
               >
                 Utharam
               </a>

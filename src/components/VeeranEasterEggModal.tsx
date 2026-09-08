@@ -59,7 +59,7 @@ export const VeeranEasterEggModal: React.FC<VeeranEasterEggModalProps> = ({ isOp
             <span className="flex items-center gap-1 font-medium text-slate-600">
               <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> Created by{' '}
               <a
-                href="https://utharam.github.io/"
+                href="https://utharam.in/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-bold text-slate-800 hover:text-amber-800 underline transition cursor-pointer"

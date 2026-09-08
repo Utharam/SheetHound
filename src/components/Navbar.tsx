@@ -60,11 +60,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 v1.0
               </span>
               <a
-                href="https://utharam.github.io/"
+                href="https://utharam.in/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100/80 hover:bg-amber-200/80 text-amber-900 border border-amber-200 uppercase tracking-wide transition cursor-pointer"
-                title="Visit Utharam (utharam.github.io)"
+                title="Visit Utharam (utharam.in)"
               >
                 by Utharam
               </a>
